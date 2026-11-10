@@ -4,9 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SpeakDaily AI</title>
+
+    <link rel="manifest" href="./manifest.webmanifest">
+    <meta name="theme-color" content="#2563eb">
 </head>
+
 <body>
     <h1>Bonjour, SpeakDaily AI !</h1>
     <p>Bienvenue dans ton application d'apprentissage de l'anglais.</p>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("./sw.js")
+                    .then(() => console.log("Service Worker enregistré"))
+                    .catch((error) => console.error("Erreur :", error));
+            });
+        }
+    </script>
 </body>
 </html>
