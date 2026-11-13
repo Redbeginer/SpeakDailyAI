@@ -1,26 +1,73 @@
-<!DOCTYPE html>
-<html lang="fr">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SpeakDaily AI</title>
-
-    <link rel="manifest" href="./manifest.webmanifest">
-    <meta name="theme-color" content="#2563eb">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#102653">
+  <meta name="description" content="SpeakDaily AI — your daily English speaking practice.">
+  <title>SpeakDaily AI</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-    <h1>Bonjour, SpeakDaily AI !</h1>
-    <p>Bienvenue dans ton application d'apprentissage de l'anglais.</p>
+<header class="topbar">
+  <div class="brand"><div class="brand-icon">🎙</div><div><h1>SpeakDaily <span>AI</span></h1><p>Speak English. Think in English.</p></div></div>
+  <button class="icon-btn" id="settingsBtn" aria-label="Settings">⚙</button>
+</header>
+<main>
+  <section class="welcome">
+    <div><p class="eyebrow">YOUR DAILY PRACTICE</p><h2>Small steps.<br>Confident English.</h2>
+    <p>Build your speaking skills, one day at a time.</p><div class="goal">◷ &nbsp; Daily goal: 20 minutes</div></div>
+    <div class="welcome-art" aria-hidden="true">🌍</div>
+  </section>
 
-    <script>
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", () => {
-                navigator.serviceWorker.register("./sw.js")
-                    .then(() => console.log("Service Worker enregistré"))
-                    .catch((error) => console.error("Erreur :", error));
-            });
-        }
-    </script>
+  <section class="menu" id="homeMenu">
+    <button class="menu-card conversation" data-page="conversation"><span class="tile-icon">💬</span><span><strong>Conversation</strong><small>Speak with your AI practice partner</small></span><b>→</b></button>
+    <button class="menu-card exercises" data-page="exercises"><span class="tile-icon">📖</span><span><strong>Exercises</strong><small>Grammar and everyday English</small></span><b>→</b></button>
+    <button class="menu-card vocabulary" data-page="vocabulary"><span class="tile-icon">Aa</span><span><strong>Vocabulary</strong><small>Useful words and expressions</small></span><b>→</b></button>
+  </section>
+
+  <section class="progress-card">
+    <div class="section-heading"><h3>▥ &nbsp; Your progress</h3><button class="text-btn" data-page="progress">View details →</button></div>
+    <div class="stats"><div><strong id="statSessions">0</strong><small>Sessions</small></div><div><strong id="statMinutes">0</strong><small>Minutes</small></div><div><strong id="statWords">0</strong><small>Words learned</small></div><div><strong id="statStreak">0</strong><small>Day streak</small></div></div>
+  </section>
+
+  <section class="page hidden" id="conversationPage">
+    <button class="back" data-page="home">← Home</button><p class="eyebrow">SPEAKING PRACTICE · ELEMENTARY</p><h2>Let's have a conversation.</h2>
+    <div class="coach-card"><div class="avatar">A</div><div><strong>Alex · Your practice partner</strong><p id="coachPrompt">Hi! Nice to meet you. What's your name, and where are you from?</p></div></div>
+    <label for="answer">Your answer</label><textarea id="answer" rows="4" placeholder="Type your answer in English..."></textarea>
+    <div class="action-row"><button class="primary" id="sendAnswer">Send answer</button><button class="secondary" id="speakAnswer">🎙 Speak</button><button class="secondary" id="listenPrompt">🔊 Listen</button></div>
+    <p class="hint" id="voiceHint">You can type or use voice input. Voice recognition availability depends on your browser.</p>
+    <div class="feedback hidden" id="feedback"><h3>Coach feedback</h3><p id="feedbackText"></p><p id="nextPrompt" class="next-prompt"></p></div>
+    <button class="secondary full hidden" id="nextQuestion">Next question →</button>
+  </section>
+
+  <section class="page hidden" id="exercisesPage">
+    <button class="back" data-page="home">← Home</button><p class="eyebrow">QUICK PRACTICE</p><h2>Choose the correct answer.</h2>
+    <div class="exercise-card"><p id="exerciseQuestion">Complete: “She ___ from Cameroon.”</p><div id="exerciseOptions" class="options"></div><p id="exerciseFeedback" class="hint" aria-live="polite"></p><button class="secondary full" id="nextExercise">Next exercise →</button></div>
+  </section>
+
+  <section class="page hidden" id="vocabularyPage">
+    <button class="back" data-page="home">← Home</button><p class="eyebrow">DAILY VOCABULARY</p><h2>Useful everyday expressions.</h2>
+    <div id="wordList" class="word-list"></div>
+  </section>
+
+  <section class="page hidden" id="progressPage">
+    <button class="back" data-page="home">← Home</button><p class="eyebrow">YOUR LEARNING JOURNEY</p><h2>Progress overview</h2>
+    <div class="progress-card"><div class="stats vertical"><div><strong id="detailSessions">0</strong><small>Completed practice turns</small></div><div><strong id="detailMinutes">0</strong><small>Practice minutes (estimated)</small></div><div><strong id="detailWords">0</strong><small>Vocabulary words saved</small></div></div></div>
+    <p class="hint">Your progress is stored on this device in this first version.</p>
+    <button class="secondary full" id="resetProgress">Reset progress</button>
+  </section>
+
+  <section class="page hidden" id="settingsPage">
+    <button class="back" data-page="home">← Home</button><p class="eyebrow">PREFERENCES</p><h2>Settings</h2>
+    <label for="level">Your English level</label><select id="level"><option>Beginner</option><option selected>Elementary</option><option>Intermediate</option><option>Advanced</option></select>
+    <label for="voiceLang">Speech language</label><select id="voiceLang"><option value="en-GB">English (UK)</option><option value="en-US">English (US)</option></select>
+    <p class="hint">This version uses your browser's speech features and pre-written coaching logic. An online AI service can be connected in a later version.</p>
+  </section>
+</main>
+<nav class="bottom-nav"><button class="active" data-page="home">⌂<small>Home</small></button><button data-page="progress">▥<small>Progress</small></button><button data-page="exercises">✓<small>Practice</small></button><button data-page="vocabulary">Aa<small>Words</small></button></nav>
+<script src="app.js"></script>
 </body>
 </html>
